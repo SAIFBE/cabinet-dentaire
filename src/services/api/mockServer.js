@@ -10,7 +10,7 @@ import { getStockStatus } from '../../utils/stockStatus';
 let currentSession = null;
 
 const MOCK_USERS = [
-  { id: '1', username: 'admin', password: 'password', name: 'Dr. Sarah Mitchell', role: 'admin' },
+  { id: '1', username: 'admin', password: '123456', name: 'Dr. Sarah Mitchell', role: 'admin' },
   { id: '2', username: 'secretary', password: 'password', name: 'Emily Johnson', role: 'secretary' },
   { id: '3', username: 'assistant', password: 'password', name: 'James Wilson', role: 'assistant' },
 ];

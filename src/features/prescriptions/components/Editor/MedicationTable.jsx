@@ -2,6 +2,7 @@ import { usePrescriptions } from '../../context/PrescriptionContext';
 import { generateId } from '../../../../lib/utils';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '../../../../shared/components/Button';
+import { ResponsiveTableWrapper } from '../../../../shared/components/ResponsiveTableWrapper';
 
 export function MedicationTable() {
   const { activePrescription, updateDraft } = usePrescriptions();
@@ -47,29 +48,31 @@ export function MedicationTable() {
            Aucun médicament ajouté. Sélectionnez un modèle ou ajoutez une ligne.
         </div>
       ) : (
-        <table className="data-table" style={{ width: '100%', tableLayout: 'fixed' }}>
-          <thead>
-            <tr>
-              <th style={{ width: '25%' }}>Médicament *</th>
-              <th style={{ width: '15%' }}>Dosage *</th>
-              <th style={{ width: '15%' }}>Forme *</th>
-              <th style={{ width: '20%' }}>Posologie *</th>
-              <th style={{ width: '15%' }}>Durée *</th>
-              {!isFinalized && <th style={{ width: '10%', textAlign: 'center' }}>Supprimer</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {meds.map((med, index) => (
-              <MedicationRow 
-                key={med.id || index}
-                med={med}
-                isFinalized={isFinalized}
-                onChange={(field, val) => handleChange(med.id, field, val)}
-                onRemove={() => handleRemoveRow(med.id)}
-              />
-            ))}
-          </tbody>
-        </table>
+        <ResponsiveTableWrapper>
+          <table className="data-table" style={{ width: '100%', tableLayout: 'fixed' }}>
+            <thead>
+              <tr>
+                <th style={{ width: '25%' }}>Médicament *</th>
+                <th style={{ width: '15%' }}>Dosage *</th>
+                <th style={{ width: '15%' }}>Forme *</th>
+                <th style={{ width: '20%' }}>Posologie *</th>
+                <th style={{ width: '15%' }}>Durée *</th>
+                {!isFinalized && <th style={{ width: '10%', textAlign: 'center' }}>Supprimer</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {meds.map((med, index) => (
+                <MedicationRow 
+                  key={med.id || index}
+                  med={med}
+                  isFinalized={isFinalized}
+                  onChange={(field, val) => handleChange(med.id, field, val)}
+                  onRemove={() => handleRemoveRow(med.id)}
+                />
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTableWrapper>
       )}
     </div>
   );

@@ -24,7 +24,7 @@ export function SettingsPage() {
       <div className="settings-section">
         <Card title={t('settings.securityAudit')} actions={<FileText size={18} style={{ color: 'var(--color-primary)' }} />}>
           <div style={{ fontSize: '0.85rem', lineHeight: '1.8' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div className="form-row">
               <div>
                 <h4 style={{ fontWeight: 600, marginBottom: '8px', color: 'var(--color-text)' }}>{t('settings.authentication')}</h4>
                 <ul style={{ color: 'var(--color-text-secondary)', paddingLeft: '16px', listStyle: 'disc' }}>

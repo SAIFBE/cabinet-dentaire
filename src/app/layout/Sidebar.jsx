@@ -15,10 +15,14 @@ import {
   FileText,
   FolderOpen,
   BarChart3,
+  X
 } from 'lucide-react';
 import { getInitials, capitalize } from '../../lib/utils';
 import logo1 from '../../assets/logo1.png';
 import logo2 from '../../assets/logo2.png';
+import { useEffect } from 'react';
+import { FeedbackWidget } from '../../shared/components/FeedbackWidget';
+
 const navItems = [
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard },
   { to: '/patients', labelKey: 'nav.patients', icon: Users },
@@ -45,19 +49,28 @@ const adminItems = [
   { to: '/settings', labelKey: 'nav.settings', icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const location = useLocation();
 
   const isAdmin = user?.role === 'admin';
   const isAssistant = user?.role === 'assistant';
   const showDentalChart = isAdmin || isAssistant;
+
+  // Close sidebar on route change for mobile
+  useEffect(() => {
+    if (isOpen) {
+      onClose();
+    }
+  }, [location.pathname]);
 
   const renderLinks = (items) =>
     items.map(({ to, labelKey, icon: Icon }) => (
       <NavLink
         key={to}
         to={to}
+        onClick={onClose}
         className={({ isActive }) =>
           `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`
         }
@@ -68,13 +81,24 @@ export function Sidebar() {
     ));
 
   return (
-    <aside className="app-layout__sidebar">
-      <div className="sidebar__brand">
-        <div className="sidebar__brand-name">
-          <img src={logo2} alt="Logo" className="sidebar__brand-logo" />
+    <>
+      {/* Mobile Overlay */}
+      <div 
+        className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--visible' : ''}`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <aside className={`app-layout__sidebar ${isOpen ? 'app-layout__sidebar--open' : ''}`}>
+        <div className="sidebar__brand">
+          <div className="sidebar__brand-name">
+            <img src={logo2} alt="Logo" className="sidebar__brand-logo" />
+            <button className="sidebar__close-btn btn--icon" onClick={onClose} aria-label="Close sidebar">
+              <X size={20} />
+            </button>
+          </div>
+          <div className="sidebar__brand-sub">{t('common.appSubtitle')}</div>
         </div>
-        <div className="sidebar__brand-sub">{t('common.appSubtitle')}</div>
-      </div>
 
       <nav className="sidebar__nav">
         <div className="sidebar__section-label">{t('nav.mainMenu')}</div>
@@ -101,6 +125,10 @@ export function Sidebar() {
         )}
       </nav>
 
+      <div style={{ padding: '0 16px 16px 16px' }}>
+        <FeedbackWidget />
+      </div>
+
       <div className="sidebar__footer">
         <div className="sidebar__user">
           <div className="sidebar__avatar">
@@ -113,5 +141,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

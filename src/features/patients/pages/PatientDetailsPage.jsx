@@ -16,6 +16,7 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
 import { Card } from '../../../shared/components/Card';
+import { ResponsiveTableWrapper } from '../../../shared/components/ResponsiveTableWrapper';
 import { formatDate } from '../../../lib/utils';
 import { formatMAD } from '../../../utils/currency';
 import { Plus, CheckCircle, FileText, FileCheck, Activity, Clock, File, Stethoscope } from 'lucide-react';
@@ -179,38 +180,40 @@ export function PatientDetailsPage() {
       {activeTab === 'appointments' && (
         <Card title="Rendez-vous">
           {appointments.length > 0 ? (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Heure</th>
-                  <th>Type</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {appointments.map(a => (
-                  <tr key={a.id}>
-                    <td>{formatDate(a.date)}</td>
-                    <td>{a.time}</td>
-                    <td>{t(`appointmentTypes.${a.type}`, a.type)}</td>
-                    <td>
-                      <span className={`badge badge--${a.status === 'scheduled' ? 'info' : 'success'}`}>
-                        {t(`statuses.${a.status}`, a.status)}
-                      </span>
-                    </td>
-                    <td>
-                      {a.status === 'scheduled' && (
-                        <Button size="sm" onClick={() => handleCheckIn(a)}>
-                          Check-in
-                        </Button>
-                      )}
-                    </td>
+            <ResponsiveTableWrapper>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {appointments.map(a => (
+                    <tr key={a.id}>
+                      <td>{formatDate(a.date)}</td>
+                      <td>{a.time}</td>
+                      <td>{t(`appointmentTypes.${a.type}`, a.type)}</td>
+                      <td>
+                        <span className={`badge badge--${a.status === 'scheduled' ? 'info' : 'success'}`}>
+                          {t(`statuses.${a.status}`, a.status)}
+                        </span>
+                      </td>
+                      <td>
+                        {a.status === 'scheduled' && (
+                          <Button size="sm" onClick={() => handleCheckIn(a)}>
+                            Check-in
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </ResponsiveTableWrapper>
           ) : (
              <p className="empty-state">Aucun rendez-vous trouvé.</p>
           )}
@@ -221,48 +224,50 @@ export function PatientDetailsPage() {
       {activeTab === 'waitingRoom' && (
         <Card title="Visites en cours">
           {waitingRoom.length > 0 ? (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Heure RDV</th>
-                  <th>Arrivé à</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {waitingRoom.map(w => (
-                  <tr key={w.id}>
-                    <td>{w.appointmentTime}</td>
-                    <td>{new Date(w.checkedInAt).toLocaleTimeString()}</td>
-                    <td>
-                       <span className={`badge badge--${w.status === 'waiting' ? 'warning' : 'info'}`}>
-                        {w.status === 'waiting' ? 'En attente' : 'En consultation'}
-                      </span>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        {w.status === 'waiting' && canViewDentalChart && (
-                          <Button size="sm" variant="secondary" onClick={() => handleUpdateWaitingRoomStatus(w.id, 'consultation')}>
-                            Appeler
-                          </Button>
-                        )}
-                        {w.status === 'consultation' && canViewDentalChart && (
-                          <Button size="sm" variant="success" onClick={() => handleUpdateWaitingRoomStatus(w.id, 'done')}>
-                            Terminer consultation
-                          </Button>
-                        )}
-                        {w.status === 'done' && canViewBilling && (
-                          <Button size="sm" variant="primary" onClick={() => handleCreateInvoice(w)}>
-                            <Plus size={14}/> Créer facture
-                          </Button>
-                        )}
-                      </div>
-                    </td>
+            <ResponsiveTableWrapper>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Heure RDV</th>
+                    <th>Arrivé à</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {waitingRoom.map(w => (
+                    <tr key={w.id}>
+                      <td>{w.appointmentTime}</td>
+                      <td>{new Date(w.checkedInAt).toLocaleTimeString()}</td>
+                      <td>
+                         <span className={`badge badge--${w.status === 'waiting' ? 'warning' : 'info'}`}>
+                          {w.status === 'waiting' ? 'En attente' : 'En consultation'}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          {w.status === 'waiting' && canViewDentalChart && (
+                            <Button size="sm" variant="secondary" onClick={() => handleUpdateWaitingRoomStatus(w.id, 'consultation')}>
+                              Appeler
+                            </Button>
+                          )}
+                          {w.status === 'consultation' && canViewDentalChart && (
+                            <Button size="sm" variant="success" onClick={() => handleUpdateWaitingRoomStatus(w.id, 'done')}>
+                              Terminer consultation
+                            </Button>
+                          )}
+                          {w.status === 'done' && canViewBilling && (
+                            <Button size="sm" variant="primary" onClick={() => handleCreateInvoice(w)}>
+                              <Plus size={14}/> Créer facture
+                            </Button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </ResponsiveTableWrapper>
           ) : (
             <p className="empty-state">Le patient n'est pas dans la salle d'attente.</p>
           )}
@@ -296,28 +301,30 @@ export function PatientDetailsPage() {
             <Alert type="warning" message="Accès refusé. Réservé aux administrateurs et secrétaires." />
            ) : (
              invoices.length > 0 ? (
-               <table className="data-table">
-                 <thead>
-                   <tr>
-                     <th>Date</th>
-                     <th>Montant</th>
-                     <th>Statut</th>
-                   </tr>
-                 </thead>
-                 <tbody>
-                   {invoices.map(i => (
-                     <tr key={i.id}>
-                       <td>{formatDate(i.issuedAt || i.createdAt)}</td>
-                       <td>{formatMAD(i.total)}</td>
-                       <td>
-                         <span className={`badge badge--${i.status === 'paid' ? 'success' : 'warning'}`}>
-                            {i.status === 'paid' ? 'Payée' : 'En attente'}
-                          </span>
-                       </td>
+               <ResponsiveTableWrapper>
+                 <table className="data-table">
+                   <thead>
+                     <tr>
+                       <th>Date</th>
+                       <th>Montant</th>
+                       <th>Statut</th>
                      </tr>
-                   ))}
-                 </tbody>
-               </table>
+                   </thead>
+                   <tbody>
+                     {invoices.map(i => (
+                       <tr key={i.id}>
+                         <td>{formatDate(i.issuedAt || i.createdAt)}</td>
+                         <td>{formatMAD(i.total)}</td>
+                         <td>
+                           <span className={`badge badge--${i.status === 'paid' ? 'success' : 'warning'}`}>
+                              {i.status === 'paid' ? 'Payée' : 'En attente'}
+                            </span>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </ResponsiveTableWrapper>
              ) : (
                <p className="empty-state">Aucune facture trouvée.</p>
              )

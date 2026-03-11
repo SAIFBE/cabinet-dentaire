@@ -9,6 +9,7 @@ import { Button } from '../../../shared/components/Button';
 import { Spinner } from '../../../shared/components/Spinner';
 import { Alert } from '../../../shared/components/Alert';
 import { Card } from '../../../shared/components/Card';
+import { ResponsiveTableWrapper } from '../../../shared/components/ResponsiveTableWrapper';
 import { formatCurrency, formatDate } from '../../../lib/utils';
 import { STATUS_CONFIG, STOCK_STATUSES } from '../../../utils/stockStatus';
 import { Plus, X, Package, Minus, RotateCcw, Clock } from 'lucide-react';
@@ -98,68 +99,70 @@ export function StockPage() {
 
       <Card>
         {filtered.length > 0 ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>{t('stock.itemName')}</th>
-                <th>{t('common.category')}</th>
-                <th>{t('stock.quantity')}</th>
-                <th>{t('stock.unitPrice')}</th>
-                <th>{t('stock.supplier')}</th>
-                <th>{t('common.status')}</th>
-                <th>{t('common.actions')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((item) => {
-                const status = item.computedStatus || 'in_stock';
-                const config = STATUS_CONFIG[status] || STATUS_CONFIG.in_stock;
-                return (
-                  <tr key={item.id}>
-                    <td style={{ fontWeight: 500 }}>{item.name}</td>
-                    <td><span className="badge badge--neutral">{t(`stockCategories.${item.category}`, item.category)}</span></td>
-                    <td>
-                      <span style={{ fontWeight: 600, color: status === 'out_of_stock' || status === 'low_stock' ? 'var(--color-danger)' : 'inherit' }}>{item.quantity}</span>
-                      <span style={{ color: 'var(--color-text-light)', fontSize: '0.75rem' }}> / {t('common.min')} {item.minQuantity} {item.unit}</span>
-                    </td>
-                    <td>{formatCurrency(item.unitPrice)}</td>
-                    <td>{item.supplier}</td>
-                    <td>
-                      <span className={`badge ${config.badge}`}>
-                        {config.icon} {t(`stockStatuses.${status}`)}
-                      </span>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '6px' }}>
-                        <button
-                          className="btn btn--ghost btn--icon"
-                          title={t('stock.movements.consume')}
-                          onClick={() => setConsumeItem(item)}
-                          disabled={item.quantity === 0}
-                        >
-                          <Minus size={15} />
-                        </button>
-                        <button
-                          className="btn btn--ghost btn--icon"
-                          title={t('stock.movements.restock')}
-                          onClick={() => setRestockItem(item)}
-                        >
-                          <RotateCcw size={15} />
-                        </button>
-                        <button
-                          className="btn btn--ghost btn--icon"
-                          title={t('stock.movements.history')}
-                          onClick={() => setHistoryItem(item)}
-                        >
-                          <Clock size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <ResponsiveTableWrapper>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>{t('stock.itemName')}</th>
+                  <th>{t('common.category')}</th>
+                  <th>{t('stock.quantity')}</th>
+                  <th>{t('stock.unitPrice')}</th>
+                  <th>{t('stock.supplier')}</th>
+                  <th>{t('common.status')}</th>
+                  <th>{t('common.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((item) => {
+                  const status = item.computedStatus || 'in_stock';
+                  const config = STATUS_CONFIG[status] || STATUS_CONFIG.in_stock;
+                  return (
+                    <tr key={item.id}>
+                      <td style={{ fontWeight: 500 }}>{item.name}</td>
+                      <td><span className="badge badge--neutral">{t(`stockCategories.${item.category}`, item.category)}</span></td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: status === 'out_of_stock' || status === 'low_stock' ? 'var(--color-danger)' : 'inherit' }}>{item.quantity}</span>
+                        <span style={{ color: 'var(--color-text-light)', fontSize: '0.75rem' }}> / {t('common.min')} {item.minQuantity} {item.unit}</span>
+                      </td>
+                      <td>{formatCurrency(item.unitPrice)}</td>
+                      <td>{item.supplier}</td>
+                      <td>
+                        <span className={`badge ${config.badge}`}>
+                          {config.icon} {t(`stockStatuses.${status}`)}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <button
+                            className="btn btn--ghost btn--icon"
+                            title={t('stock.movements.consume')}
+                            onClick={() => setConsumeItem(item)}
+                            disabled={item.quantity === 0}
+                          >
+                            <Minus size={15} />
+                          </button>
+                          <button
+                            className="btn btn--ghost btn--icon"
+                            title={t('stock.movements.restock')}
+                            onClick={() => setRestockItem(item)}
+                          >
+                            <RotateCcw size={15} />
+                          </button>
+                          <button
+                            className="btn btn--ghost btn--icon"
+                            title={t('stock.movements.history')}
+                            onClick={() => setHistoryItem(item)}
+                          >
+                            <Clock size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </ResponsiveTableWrapper>
         ) : (
           <div className="empty-state">
             <Package size={40} className="empty-state__icon" />

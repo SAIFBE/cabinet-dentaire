@@ -7,6 +7,7 @@ import { Button } from '../../../shared/components/Button';
 import { Spinner } from '../../../shared/components/Spinner';
 import { Alert } from '../../../shared/components/Alert';
 import { Card } from '../../../shared/components/Card';
+import { ResponsiveTableWrapper } from '../../../shared/components/ResponsiveTableWrapper';
 import { formatDate } from '../../../lib/utils';
 import { Plus, X, UserPlus, Users, FileText, Trash2 } from 'lucide-react';
 
@@ -101,59 +102,61 @@ export function PatientsPage() {
 
       <Card>
         {patients.length > 0 ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>{t('common.name')}</th>
-                <th>{t('common.email')}</th>
-                <th>{t('common.phone')}</th>
-                <th>{t('patients.dateOfBirth')}</th>
-                <th>{t('patients.created')}</th>
-                <th>{t('common.actions')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {patients.map((p) => (
-                <tr key={p.id}>
-                  <td style={{ fontWeight: 500 }}>{p.firstName} {p.lastName}</td>
-                  <td>{p.email}</td>
-                  <td>{p.phone}</td>
-                  <td>{formatDate(p.dateOfBirth)}</td>
-                  <td>{formatDate(p.createdAt)}</td>
-                  <td>
-                    <div className="patient-actions">
-                      <Button variant="ghost" size="sm" onClick={() => openEdit(p)}>
-                        {t('common.edit')}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(p)}
-                        disabled={deletingId === p.id}
-                        style={{ color: 'var(--color-danger, #ef4444)' }}
-                      >
-                        <Trash2 size={14} />
-                      </Button>
-                      <Link
-                        to={`/patients/${p.id}`}
-                        className="patient-pdf-link"
-                        title="Voir le dossier complet"
-                      >
-                        <FileText size={15} /> Dossier
-                      </Link>
-                      <Link
-                        to={`/patients/${p.id}/feuille-soins`}
-                        className="patient-pdf-link"
-                        title="Feuille de soins (CNSS/CNOPS)"
-                      >
-                        <FileText size={15} /> CNSS
-                      </Link>
-                    </div>
-                  </td>
+          <ResponsiveTableWrapper>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>{t('common.name')}</th>
+                  <th>{t('common.email')}</th>
+                  <th>{t('common.phone')}</th>
+                  <th>{t('patients.dateOfBirth')}</th>
+                  <th>{t('patients.created')}</th>
+                  <th>{t('common.actions')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {patients.map((p) => (
+                  <tr key={p.id}>
+                    <td style={{ fontWeight: 500 }}>{p.firstName} {p.lastName}</td>
+                    <td>{p.email}</td>
+                    <td>{p.phone}</td>
+                    <td>{formatDate(p.dateOfBirth)}</td>
+                    <td>{formatDate(p.createdAt)}</td>
+                    <td>
+                      <div className="patient-actions">
+                        <Button variant="ghost" size="sm" onClick={() => openEdit(p)}>
+                          {t('common.edit')}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(p)}
+                          disabled={deletingId === p.id}
+                          style={{ color: 'var(--color-danger, #ef4444)' }}
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                        <Link
+                          to={`/patients/${p.id}`}
+                          className="patient-pdf-link"
+                          title="Voir le dossier complet"
+                        >
+                          <FileText size={15} /> Dossier
+                        </Link>
+                        <Link
+                          to={`/patients/${p.id}/feuille-soins`}
+                          className="patient-pdf-link"
+                          title="Feuille de soins (CNSS/CNOPS)"
+                        >
+                          <FileText size={15} /> CNSS
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTableWrapper>
         ) : (
           <div className="empty-state">
             <Users size={40} className="empty-state__icon" />

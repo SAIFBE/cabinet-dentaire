@@ -6,6 +6,7 @@ import { Button } from '../../../shared/components/Button';
 import { Spinner } from '../../../shared/components/Spinner';
 import { Alert } from '../../../shared/components/Alert';
 import { Card } from '../../../shared/components/Card';
+import { ResponsiveTableWrapper } from '../../../shared/components/ResponsiveTableWrapper';
 import { formatDate } from '../../../lib/utils';
 import { Plus, X, CalendarDays } from 'lucide-react';
 
@@ -53,34 +54,36 @@ export function AppointmentsPage() {
 
       <Card>
         {appointments.length > 0 ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>{t('common.patient')}</th>
-                <th>{t('common.date')}</th>
-                <th>{t('common.time')}</th>
-                <th>{t('common.type')}</th>
-                <th>{t('common.status')}</th>
-                <th>{t('common.notes')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.map((apt) => (
-                <tr key={apt.id}>
-                  <td style={{ fontWeight: 500 }}>{apt.patientName}</td>
-                  <td>{formatDate(apt.date)}</td>
-                  <td>{apt.time}</td>
-                  <td>{t(`appointmentTypes.${apt.type}`, apt.type)}</td>
-                  <td>
-                    <span className={`badge badge--${apt.status === 'completed' ? 'success' : apt.status === 'cancelled' ? 'danger' : 'info'}`}>
-                      {t(`statuses.${apt.status}`, apt.status)}
-                    </span>
-                  </td>
-                  <td style={{ color: 'var(--color-text-secondary)', fontSize: '0.8rem' }}>{apt.notes}</td>
+          <ResponsiveTableWrapper>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>{t('common.patient')}</th>
+                  <th>{t('common.date')}</th>
+                  <th>{t('common.time')}</th>
+                  <th>{t('common.type')}</th>
+                  <th>{t('common.status')}</th>
+                  <th>{t('common.notes')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {appointments.map((apt) => (
+                  <tr key={apt.id}>
+                    <td style={{ fontWeight: 500 }}>{apt.patientName}</td>
+                    <td>{formatDate(apt.date)}</td>
+                    <td>{apt.time}</td>
+                    <td>{t(`appointmentTypes.${apt.type}`, apt.type)}</td>
+                    <td>
+                      <span className={`badge badge--${apt.status === 'completed' ? 'success' : apt.status === 'cancelled' ? 'danger' : 'info'}`}>
+                        {t(`statuses.${apt.status}`, apt.status)}
+                      </span>
+                    </td>
+                    <td style={{ color: 'var(--color-text-secondary)', fontSize: '0.8rem' }}>{apt.notes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTableWrapper>
         ) : (
           <div className="empty-state">
             <CalendarDays size={40} className="empty-state__icon" />

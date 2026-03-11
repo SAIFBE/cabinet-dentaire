@@ -5,6 +5,7 @@ import { mockServer } from '../../../services/api/mockServer';
 import { Spinner } from '../../../shared/components/Spinner';
 import { Card } from '../../../shared/components/Card';
 import { Alert } from '../../../shared/components/Alert';
+import { ResponsiveTableWrapper } from '../../../shared/components/ResponsiveTableWrapper';
 import { formatDate } from '../../../lib/utils';
 import { Users, CalendarDays, Receipt, AlertTriangle } from 'lucide-react';
 import { randomDelay } from '../../../lib/utils';
@@ -78,32 +79,34 @@ export function DashboardPage() {
 
       <Card title={t('dashboard.latestAppointments')}>
         {stats.recentAppointments && stats.recentAppointments.length > 0 ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>{t('common.patient')}</th>
-                <th>{t('common.date')}</th>
-                <th>{t('common.time')}</th>
-                <th>{t('common.type')}</th>
-                <th>{t('common.status')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.recentAppointments.map((apt) => (
-                <tr key={apt.id}>
-                  <td style={{ fontWeight: 500 }}>{apt.patientName}</td>
-                  <td>{formatDate(apt.date)}</td>
-                  <td>{apt.time}</td>
-                  <td>{t(`appointmentTypes.${apt.type}`, apt.type)}</td>
-                  <td>
-                    <span className={`badge badge--${apt.status === 'completed' ? 'success' : apt.status === 'cancelled' ? 'danger' : 'info'}`}>
-                      {t(`statuses.${apt.status}`, apt.status)}
-                    </span>
-                  </td>
+          <ResponsiveTableWrapper>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>{t('common.patient')}</th>
+                  <th>{t('common.date')}</th>
+                  <th>{t('common.time')}</th>
+                  <th>{t('common.type')}</th>
+                  <th>{t('common.status')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {stats.recentAppointments.map((apt) => (
+                  <tr key={apt.id}>
+                    <td style={{ fontWeight: 500 }}>{apt.patientName}</td>
+                    <td>{formatDate(apt.date)}</td>
+                    <td>{apt.time}</td>
+                    <td>{t(`appointmentTypes.${apt.type}`, apt.type)}</td>
+                    <td>
+                      <span className={`badge badge--${apt.status === 'completed' ? 'success' : apt.status === 'cancelled' ? 'danger' : 'info'}`}>
+                        {t(`statuses.${apt.status}`, apt.status)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTableWrapper>
         ) : (
           <div className="empty-state">
             <p className="empty-state__text">{t('dashboard.noAppointments')}</p>

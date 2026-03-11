@@ -29,30 +29,42 @@ export function RadiologySidebar() {
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
-          padding: '8px 12px',
-          marginBottom: '6px',
-          border: 'none',
-          borderRadius: '6px',
+          padding: '10px 14px',
+          marginBottom: '8px',
+          border: isActive ? '1px solid rgba(var(--color-primary-rgb), 0.2)' : '1px solid transparent',
+          borderRadius: '8px',
           backgroundColor: isActive ? 'var(--color-primary)' : 'transparent',
           color: isActive ? 'white' : 'var(--color-text)',
           cursor: 'pointer',
           textAlign: 'left',
-          fontSize: '0.9rem',
-          transition: 'all 0.2s',
+          fontSize: '0.95rem',
+          fontWeight: isActive ? 500 : 400,
+          transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: isActive ? '0 4px 12px rgba(var(--color-primary-rgb), 0.2)' : 'none',
         }}
         onMouseOver={(e) => {
-           if (!isActive) e.currentTarget.style.backgroundColor = 'var(--color-bg-hover)';
+           if (!isActive) {
+               e.currentTarget.style.backgroundColor = 'var(--color-bg-hover)';
+               e.currentTarget.style.transform = 'translateX(4px)';
+           }
         }}
         onMouseOut={(e) => {
-           if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
+           if (!isActive) {
+               e.currentTarget.style.backgroundColor = 'transparent';
+               e.currentTarget.style.transform = 'translateX(0)';
+           }
         }}
       >
-        <span>{label}</span>
+        <span style={{ transition: 'transform 0.2s' }}>{label}</span>
         <span style={{ 
           fontSize: '0.75rem', 
-          backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'var(--color-border)', 
-          padding: '2px 6px', 
-          borderRadius: '10px' 
+          fontWeight: 600,
+          backgroundColor: isActive ? 'rgba(255,255,255,0.25)' : 'var(--color-bg)', 
+          color: isActive ? 'white' : 'var(--color-text-secondary)',
+          padding: '3px 8px', 
+          borderRadius: '12px',
+          border: isActive ? 'none' : '1px solid var(--color-border)',
+          transition: 'all 0.2s'
         }}>
           {counts[type] || 0}
         </span>
@@ -61,14 +73,18 @@ export function RadiologySidebar() {
   };
 
   return (
-    <div style={{ padding: '0 16px 16px 0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-        <Filter size={16} />
-        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Filtres</h3>
+    <div style={{ padding: '0 20px 20px 0', borderRight: '1px solid var(--color-border)', height: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
+        <div style={{ padding: '8px', backgroundColor: 'var(--color-primary-light)', borderRadius: '8px', color: 'var(--color-primary)' }}>
+          <Filter size={18} />
+        </div>
+        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Filtres Cliniques</h3>
       </div>
       
-      <div style={{ marginBottom: '24px' }}>
-        <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '10px' }}>Catégorie</h4>
+      <div style={{ marginBottom: '32px' }}>
+        <h4 style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--color-text-tertiary)', marginBottom: '12px', marginLeft: '4px' }}>
+          Cathégories
+        </h4>
         <CategoryButton type="all" label="Toutes les images" />
         <CategoryButton type="panoramic" label="Panoramique" />
         <CategoryButton type="periapical" label="Rétro-alvéolaire" />
@@ -77,18 +93,34 @@ export function RadiologySidebar() {
         <CategoryButton type="intraoral" label="Photo Intra-orale" />
       </div>
 
-      <div>
-        <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '10px' }}>Dent spécifique</h4>
+      <div style={{ backgroundColor: 'var(--color-bg-card)', padding: '16px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
+        <h4 style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--color-text-tertiary)', marginBottom: '12px' }}>Recherche par dent</h4>
         <input 
           type="text" 
-          placeholder="Ex: 46" 
+          placeholder="Ex: 46, 47" 
           className="form-input" 
           value={filters.tooth}
           onChange={(e) => setFilters(prev => ({ ...prev, tooth: e.target.value }))}
-          style={{ width: '100%', padding: '8px', fontSize: '0.9rem' }}
+          style={{ 
+            width: '100%', 
+            padding: '10px 14px', 
+            fontSize: '0.95rem',
+            borderRadius: '8px',
+            border: '1px solid var(--color-border)',
+            backgroundColor: 'var(--color-bg)',
+            transition: 'border-color 0.2s, box-shadow 0.2s'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = 'var(--color-primary)';
+            e.target.style.boxShadow = '0 0 0 3px rgba(var(--color-primary-rgb), 0.1)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'var(--color-border)';
+            e.target.style.boxShadow = 'none';
+          }}
         />
-        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '6px' }}>
-           * Un Odontogramme visuel sera ajouté dans la Phase 2.
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '10px', lineHeight: 1.4, display: 'flex', gap: '6px' }}>
+           <span style={{ color: 'var(--color-primary)' }}>*</span> Un Odontogramme visuel sera ajouté dans la Phase 2.
         </p>
       </div>
     </div>
